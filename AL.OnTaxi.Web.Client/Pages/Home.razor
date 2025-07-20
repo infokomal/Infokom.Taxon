@@ -1,0 +1,136 @@
+@page "/"
+
+<PageTitle>OnTaxi</PageTitle>
+
+<header class="navbar navbar-expand-lg navbar-custom fixed-top">
+	<div class="container">
+		<a class="navbar-brand" href="#home">
+			<img src="https://ontaxi.al/img/logo.png" alt="OnTaxi" style="height:40px;" />
+		</a>
+
+		<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+			<span class="navbar-toggler-icon"></span>
+		</button>
+		<div class="collapse navbar-collapse" id="navbarNav">
+			<ul class="navbar-nav ms-auto">
+				<li class="nav-item"><a class="nav-link" href="#home">Home</a></li>
+				<li class="nav-item"><a class="nav-link" href="#trips">Trip Prices</a></li>
+				<li class="nav-item"><a class="nav-link" href="#contact">Contact Us</a></li>
+			</ul>
+		</div>
+	</div>
+</header>
+
+<div>
+	<section id="home"
+		    class="d-flex flex-column justify-content-center align-items-center bg-light text-center"
+		    style="min-height: 100vh; background-image: url('https://ontaxi.al/img/cover.png'); background-size: cover; background-position: center; background-repeat: no-repeat; position: relative;">
+
+		<div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.55); z-index: 1;"></div>
+		<div style="position: relative; z-index: 2; width: 100%;">
+			<h1 class="display-4 fw-bold mb-3 text-white fade-in-up">Welcome to OnTaxi</h1>
+			<p class="lead text-white fade-in-up">Every mile with us is a promise of comfort and exceptional service.</p>
+
+			<div class="d-flex justify-content-center gap-4 my-4">
+				<a href="viber://chat?number=%2B355694055569" target="_blank" title="Viber" class="text-decoration-none fade-in-up">
+					<i class="fa-brands fa-viber fa-2x" style="color:#7360F2"></i>
+				</a>
+				<a href="https://wa.me/355694055569" target="_blank" title="WhatsApp" class="text-decoration-none fade-in-up">
+					<i class="fa-brands fa-whatsapp fa-2x" style="color:#25D366"></i>
+				</a>
+				<a href="https://instagram.com/on.taxi" target="_blank" title="Instagram" class="text-decoration-none fade-in-up">
+					<i class="fa-brands fa-instagram fa-2x" style="color:#E4405F"></i>
+				</a>
+				<a href="mailto:info@ontaxi.al" title="Email" class="text-decoration-none fade-in-up">
+					<i class="fa-solid fa-envelope fa-2x" style="color:#0072C6"></i>
+				</a>
+				<a href="https://www.ontaxi.al" target="_blank" title="Website" class="text-decoration-none fade-in-up">
+					<i class="fa-solid fa-globe fa-2x" style="color:#28a745"></i>
+				</a>
+			</div>
+
+			<div class="my-3 fade-in-up">
+				<span class="fw-bold display-5 px-4 py-2" style="background:#28a745; color:#fff; border-radius:1rem;">
+					069 40 55 569
+				</span>
+			</div>
+			<div class="mt-2 fade-in-up">
+				<span class="lead text-white">Need a ride? Just call!</span>
+			</div>
+		</div>
+	</section>
+
+
+
+	<section id="trips" class="py-5 bg-white">
+		<div class="container">
+			<h2 class="text-center mb-5">Trip Prices</h2>
+
+			@foreach (var group in TripGroups)
+			{
+				<h4 class="mb-4 mt-5 text-center">@group.Group</h4>
+				<div class="d-flex flex-wrap justify-content-center gap-4">
+					@foreach (var trip in group.Trips)
+					{
+						<div class="card shadow-sm text-center m-2" style="width: 18rem;">
+							<div class="card-body">
+								<h5 class="card-title">@trip.Source.Name → @trip.Target.Name</h5>
+								<h4 class="card-subtitle my-3 text-primary">@trip.Cost ALL</h4>
+								<button class="btn btn-outline-success btn-sm" @onclick="() => ShowTripOnMap(trip.Source, trip.Target)">Show on Map</button>
+							</div>
+						</div>
+					}
+				</div>
+			}
+		</div>
+	</section>
+
+	<section id="contact" class="py-5 bg-light">
+		<div class="container text-center">
+			<h2>Contact Us</h2>
+			<p class="lead">Phone: +355 69 123 4567 | Email: info@ontaxi.al</p>
+		</div>
+	</section>
+</div>
+
+<div id="mapModal" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.5); align-items:center; justify-content:center; z-index:9999;">
+    <div style="background:#fff; border-radius:8px; padding:1rem; max-width:600px; width:90vw; position:relative;">
+        <h5 id="mapModalTitle"></h5>
+        <div id="tripMap" style="height:400px; width:100%;"></div>
+        <button onclick="closeMapModal()" style="position:absolute; top:8px; right:8px;" class="btn btn-sm btn-danger">Close</button>
+    </div>
+</div>
+
+
+@code {
+	[Inject]
+	IJSRuntime JS { get; set; }
+
+	[Inject]
+	TripRepository TripRepo { get; set; }
+
+	private List<TripGroup> TripGroups;
+
+	protected override void OnInitialized()
+	{
+		TripGroups = TripRepo.GetTripGroups();
+	}
+
+	protected override async Task OnAfterRenderAsync(bool firstRender)
+	{
+		if (firstRender)
+		{
+			await JS.InvokeVoidAsync("ontaxiNavbarScroll");
+			await JS.InvokeVoidAsync("observeFadeIn");
+
+		}
+	}
+
+
+	private async Task ShowTripOnMap(LocationInfo source, LocationInfo target)
+	{
+		await JS.InvokeVoidAsync("showTripOnMap", source.Name, target.Name);
+	}
+
+
+}
