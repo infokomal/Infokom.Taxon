@@ -3,7 +3,7 @@ using Infokom.Taxon.App.Models;
 
 namespace Infokom.Taxon.App.Queries.Users
 {
-	public class UserSearchQueryValidator<TQuery, TItem> : AbstractValidator<TQuery> where TQuery : UserSearchQuery<TItem> where TItem : UserModel
+	public abstract class UserSearchQueryValidator<TQuery, TItem> : AbstractValidator<TQuery> where TQuery : UserSearchQuery<TItem> where TItem : UserModel
 	{
 		public UserSearchQueryValidator()
 		{

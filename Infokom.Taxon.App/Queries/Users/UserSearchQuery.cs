@@ -4,7 +4,7 @@ using MediatR;
 
 namespace Infokom.Taxon.App.Queries.Users
 {
-	public class UserSearchQuery<TUserItem> : IRequest<List<TUserItem>>
+	public abstract class UserSearchQuery<TUserItem> : IRequest<List<TUserItem>>
 	{
 		public string Prename { get; set; }
 		public string Midname { get; set; }
