@@ -1,4 +1,5 @@
 ﻿using Infokom.Taxon.Core.Entities;
+using Infokom.Taxon.Core.Entities.Users;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Reflection.Emit;
@@ -11,8 +12,9 @@ namespace Infokom.Taxon.Data
 
 		public DbSet<Vehicle> Vehicles { get; set; }
 		public DbSet<Driver> Drivers { get; set; }
-		public DbSet<Client> Clients { get; set; }
-		public DbSet<Trip> PredefinedTrips { get; set; }
+		public DbSet<Passenger> Passengers { get; set; }
+		public DbSet<Dispatcher> Dispatchers { get; set; }
+		public DbSet<Trip> Trips { get; set; }
 
 
 		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

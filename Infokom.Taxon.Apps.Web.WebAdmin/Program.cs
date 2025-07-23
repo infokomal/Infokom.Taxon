@@ -6,9 +6,9 @@ using AutoMapper;
 using FluentValidation;
 using Infokom.Taxon.App;
 using Infokom.Taxon.App.Mappers;
-using Infokom.Taxon.App.Commands.Drivers;
 using Infokom.Taxon.Data;
 using Microsoft.EntityFrameworkCore;
+using Infokom.Taxon.App.Commands.Users.Drivers;
 
 namespace Infokom.Taxon.Apps.Web.WebAdmin
 {
@@ -26,7 +26,7 @@ namespace Infokom.Taxon.Apps.Web.WebAdmin
 				options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 			});
 
-			builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining<CreateDriverCommand>());
+			builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining<DriverCreateCommand>());
 			builder.Services.AddAutoMapper(cfg => { }, typeof(AutoMapperProfile).Assembly);
 			builder.Services.AddValidatorsFromAssemblyContaining<CreateDriverCommandValidator>();
 
@@ -34,8 +34,7 @@ namespace Infokom.Taxon.Apps.Web.WebAdmin
 
 			builder.Services.AddBlazorBootstrap();
 
-			builder.Services.AddRazorComponents()
-	  .AddInteractiveServerComponents();
+			builder.Services.AddRazorComponents().AddInteractiveServerComponents();
 
 
 			var app = builder.Build();

@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
-using Infokom.Taxon.App.Commands.Drivers;
-using Infokom.Taxon.App.Models;
-using Infokom.Taxon.Core.Entities;
+using Infokom.Taxon.App.Commands.Users.Drivers;
+using Infokom.Taxon.App.Models.Users;
+using Infokom.Taxon.Core.Entities.Users;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Infokom.Taxon.App.Mappers
@@ -13,10 +13,20 @@ namespace Infokom.Taxon.App.Mappers
 			// Driver mappings
 			this.CreateMap<Driver, DriverModel>()
 				.ReverseMap();
-			this.CreateMap<CreateDriverCommand, Driver>()
+			this.CreateMap<DriverCreateCommand, Driver>()
 			    .ForMember(dest => dest.Id, opt => opt.Ignore());
 
-			// Add other mappings here as needed
+			// Driver mappings
+			this.CreateMap<Pass, DriverModel>()
+				.ReverseMap();
+			this.CreateMap<DriverCreateCommand, Driver>()
+			    .ForMember(dest => dest.Id, opt => opt.Ignore());
+
+			// Driver mappings
+			this.CreateMap<Driver, DriverModel>()
+				.ReverseMap();
+			this.CreateMap<DriverCreateCommand, Driver>()
+			    .ForMember(dest => dest.Id, opt => opt.Ignore());
 		}
 	}
 
